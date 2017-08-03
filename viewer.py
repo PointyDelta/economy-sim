@@ -13,6 +13,7 @@ tariff_rate_e = 10
 tariff_rate_elec= 5
 print("Please note - only tariffs between 0 and 30 will work due to there only being data for that")
 print("The current income tax rate is a flat tax of 35%")
+
 elec_price =2300 ##electronics
 a_price = 3762 #agri
 o_price = 6804 ##ore
@@ -55,7 +56,7 @@ def change_gdp():
         gdp = gdp*(incmtax_rate*0.97)
     return gdp
 
-
+print("Your current GDP is",change_gdp())
 ##def prop(variable_to_be_decremented,previous_value_of_other_variable,new_value_of_other_variable):
 ##    a=new_value_of_other_variable-previous_value_of_other_variable
 ##    return -3*a+variable_to_be_decremented    
