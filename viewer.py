@@ -89,6 +89,8 @@ def agriculture_tariff(t):
     if (t > 30 or t <0.0000000000000000000000000000001):
         print("That's not a valid input, please enter an input above 0 and below 30")
     else:
+        global tariff_rate_a
+        tariff_rate_a = t
         cs = con.cursor()
         cs.execute( "SELECT * FROM food_prices WHERE Tariff = ?;", (t,) )
         p_f_o = cs.fetchall()
@@ -104,6 +106,7 @@ def agriculture_tariff(t):
             print ("The new average price per person per year for food is now",row[0])
             global a_price
             a_price = row[0]
+            
             change_gdp()
 
         
@@ -115,6 +118,8 @@ def luxury_tariff(t):
     if (t > 30 or t <0.0000000000000000000000000000001):
         print("That's not a valid input, please enter an input above 0 and below 30")
     else:
+        global tariff_rate_l
+        tariff_rate_l = t
         cs = con.cursor()
         cs.execute( "SELECT * FROM healthcare_costs WHERE Tariff = ?;", (t,) )
         p_f_o = cs.fetchall()
@@ -154,45 +159,54 @@ def ore_tariff(t):
     
     print("The current tariff on ore imports is",t)
     t = float(input("Please enter the amount you would like to Change the tariff on ore (steel etc)"))
-    cs = con.cursor() 
-    cs.execute( "SELECT * FROM ore_prices WHERE Tariff = ?;", (t,) )
-    
-    p_f_o = cs.fetchall()
-    if( len(p_f_o) == 0 ) :
-        cs.execute("INSERT INTO ore_prices (Tariff,Price) VALUES(?,?)",(t, predict(t,"ore_prices")))
-        cs.execute("COMMIT;")
-        cs.execute("SELECT Price FROM ore_prices WHERE Tariff = ?",(t,))
-        p_f_o = cs.fetchall()
+    if (t > 30 or t <0.0000000000000000000000000000001):
+        print("That's not a valid input, please enter an input above 0 and below 30")
+        
     else:
-        cs.execute("SELECT Price FROM ore_prices WHERE Tariff = ?",(t,))
+        cs = con.cursor() 
+        cs.execute( "SELECT * FROM ore_prices WHERE Tariff = ?;", (t,) )
+        global tariff_rate_o
+        tariff_rate_o = t
         p_f_o = cs.fetchall()
-    for row in p_f_o:
-        print ("The new average price per person per year for ore is now",row[0])
-        change_gdp()
-        global o_price
-        o_price = row[0]
+        if( len(p_f_o) == 0 ) :
+            cs.execute("INSERT INTO ore_prices (Tariff,Price) VALUES(?,?)",(t, predict(t,"ore_prices")))
+            cs.execute("COMMIT;")
+            cs.execute("SELECT Price FROM ore_prices WHERE Tariff = ?",(t,))
+            p_f_o = cs.fetchall()
+        else:
+            cs.execute("SELECT Price FROM ore_prices WHERE Tariff = ?",(t,))
+            p_f_o = cs.fetchall()
+        for row in p_f_o:
+            print ("The new average price per person per year for ore is now",row[0])
+            change_gdp()
+            global o_price
+            o_price = row[0]
         
 def energy_tariff(t):
     
     print("The current tariff on energy imports is",t)
     t = float(input("Please enter the amount you would like to Change the tariff on energy (oil etc)"))
-    cs = con.cursor() 
-    cs.execute( "SELECT * FROM energy_price WHERE Tariff = ?;", (t,) )
-    
-    p_f_o = cs.fetchall()
-    if( len(p_f_o) == 0 ) :
-        cs.execute("INSERT INTO energy_price (Tariff,Price) VALUES(?,?)",(t, predict(t,"energy_price")))
-        cs.execute("COMMIT;")
-        cs.execute("SELECT Price FROM energy_price WHERE Tariff = ?",(t,))
-        p_f_o = cs.fetchall()
+    if (t > 30 or t <0.0000000000000000000000000000001):
+        print("That's not a valid input, please enter an input above 0 and below 30")
     else:
-        cs.execute("SELECT Price FROM energy_price WHERE Tariff = ?",(t,))
+        cs = con.cursor() 
+        cs.execute( "SELECT * FROM energy_price WHERE Tariff = ?;", (t,) )
+        global tariff_rate_e
+        tariff_rate_e = t
         p_f_o = cs.fetchall()
-    for row in p_f_o:
-        print ("The new average price per person per year for energy is now",row[0])
-        change_gdp()
-        global e_price
-        e_price = row[0]
+        if( len(p_f_o) == 0 ) :
+            cs.execute("INSERT INTO energy_price (Tariff,Price) VALUES(?,?)",(t, predict(t,"energy_price")))
+            cs.execute("COMMIT;")
+            cs.execute("SELECT Price FROM energy_price WHERE Tariff = ?",(t,))
+            p_f_o = cs.fetchall()
+        else:
+            cs.execute("SELECT Price FROM energy_price WHERE Tariff = ?",(t,))
+            p_f_o = cs.fetchall()
+        for row in p_f_o:
+            print ("The new average price per person per year for energy is now",row[0])
+            change_gdp()
+            global e_price
+            e_price = row[0]
         
         
 def elec_tariff(t):
@@ -203,7 +217,8 @@ def elec_tariff(t):
         print("That's not a valid input, please enter an input above 0 and below 30")
     else:
         cs = con.cursor() 
-
+        global tariff_rate_elec
+        tariff_rate_elec = t
         ##################################
         cs.execute( "SELECT * FROM elec_prices WHERE Tariff = ?;", (t,) )
         
